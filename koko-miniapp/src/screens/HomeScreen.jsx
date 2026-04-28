@@ -76,7 +76,7 @@ export default function HomeScreen() {
           {done ? `≈ ${fmt(tokens)} $KOKO at TGE` : 'Complete tasks to earn $KOKO'}
         </div>
 
-        <GoldButton onClick={() => openTask('tasks')} style={{ marginBottom:0 }}>
+        <GoldButton onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: 'tasks' }))} style={{ marginBottom:0 }}>
           Continue Tasks
         </GoldButton>
       </div>
