@@ -69,7 +69,7 @@ export default function HomeScreen() {
 
   {/* Koko character image */}
   <img
-    src="https://i.postimg.cc/mk0t78FS/photo-2026-04-28-13-49-24.jpg"
+    src="https://i.postimg.cc/tgTkS4ML/8e5af09c-41df-471c-9e17-d6ae16b23ae9.png"
     alt="Koko"
     style={{
       position:'absolute', right:0, bottom:0,
