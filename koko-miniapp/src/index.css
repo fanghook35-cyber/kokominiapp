@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
 
 :root {
-  /* Core palette */
   --ink:      #0d0a05;
   --ink2:     #1a1209;
   --ink3:     #2a1f0e;
@@ -15,22 +14,22 @@
   --gold3:    #f5e4a8;
   --paper:    #f5eed8;
   --rice:     #faf6ed;
-
-  /* Semantic */
   --success:  #2d6a2d;
   --danger:   #8b1a1a;
   --warn:     #7a5900;
-
-  /* Fonts */
   --font-display: 'Cinzel', serif;
   --font-body:    'Crimson Pro', serif;
-
-  /* Layout */
   --nav-h: 64px;
   --safe-bottom: env(safe-area-inset-bottom, 16px);
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
 
 html, body, #root {
   height: 100%;
@@ -41,17 +40,32 @@ html, body, #root {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
-button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
-input  { font-family: var(--font-body); }
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  background: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
 
-/* Scrollbar */
+input { font-family: var(--font-body); }
+
+a, [role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 ::-webkit-scrollbar { width: 2px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--ash); border-radius: 2px; }
 
-/* Animations */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -64,16 +78,14 @@ input  { font-family: var(--font-body); }
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 @keyframes flicker {
   0%,100% { opacity: 1; }
   50%     { opacity: 0.85; }
 }
 @keyframes rise {
   from { opacity: 0; transform: translateY(20px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0)  scale(1); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes float {
   0%,100% { transform: translateY(0px); }
