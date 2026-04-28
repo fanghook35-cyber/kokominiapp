@@ -69,15 +69,15 @@ export default function HomeScreen() {
 
   {/* Koko character image */}
   <img
-    src="https://ibb.co/bM85mMYP"
+    src="https://i.ibb.co/YOUR_IMAGE_ID/koko.png"
     alt="Koko"
     style={{
       position:'absolute', right:0, bottom:0,
       height:'140px', width:'auto',
       objectFit:'contain',
       pointerEvents:'none',
-    }}>
-          Nihonkai Mini App
+    }}
+  />
         </div>
 
         {user.is_suspicious && <SuspiciousBanner />}
