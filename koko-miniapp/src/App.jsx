@@ -18,28 +18,31 @@ const SCREENS = {
 }
 
 export default function App() {
-  const [tab, setTab]       = useState('home')
-  const [ready, setReady]   = useState(false)
-  const [error, setError]   = useState(null)
+  const [tab, setTab]     = useState('home')
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
     async function boot() {
       try {
         TG.ready()
         TG.expand()
+        // Disable bounce/scroll interference in Telegram webview
+        document.body.style.overflow = 'hidden'
+        document.documentElement.style.overflow = 'hidden'
+        document.body.style.position = 'fixed'
+        document.body.style.width = '100%'
         await initSupabase(TG.initData)
-        setReady(true)
       } catch(e) {
         console.error(e)
-        setError(e.message)
-        setReady(true) // show app anyway (dev mode)
+      } finally {
+        setReady(true)
       }
     }
     boot()
   }, [])
 
   function handleTabChange(id) {
-    TG.haptic('selection')
+    try { TG.haptic('selection') } catch(e) {}
     setTab(id)
   }
 
@@ -55,17 +58,18 @@ export default function App() {
 
   return (
     <div style={{
-      height:'100vh', height:'100dvh',
-      display:'flex', flexDirection:'column',
-      background:'var(--ink)',
-      overflow:'hidden',
+      height: '100vh',
+      height: '100dvh',
+      display: 'flex',
+      flexDirection: 'column',
+      background: 'var(--ink)',
+      overflow: 'hidden',
+      position: 'relative',
+      WebkitOverflowScrolling: 'touch',
     }}>
-      {/* Screen area */}
       <div style={{ flex:1, overflow:'hidden', display:'flex', flexDirection:'column' }}>
         <Screen key={tab} />
       </div>
-
-      {/* Bottom nav */}
       <BottomNav active={tab} onChange={handleTabChange} />
     </div>
   )
