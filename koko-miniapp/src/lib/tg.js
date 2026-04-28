@@ -19,8 +19,18 @@ export const TG = {
 
   /** Deep-link back into the bot */
   openBot(startParam = '') {
-    const url = `https://t.me/${import.meta.env.VITE_BOT_USERNAME}${startParam ? `?start=${startParam}` : ''}`
-    tg ? tg.openTelegramLink(url) : window.open(url, '_blank')
+    const url = `https://t.me/${import.meta.env.VITE_BOT_USERNAME ?? 'KokoKairokuBot'}${startParam ? `?start=${startParam}` : ''}`
+    try {
+      if (tg && tg.openTelegramLink) {
+        tg.openTelegramLink(url)
+      } else if (tg && tg.openLink) {
+        tg.openLink(url)
+      } else {
+        window.open(url, '_blank')
+      }
+    } catch(e) {
+      window.open(url, '_blank')
+    }
   },
 
   openUrl(url) {
