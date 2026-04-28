@@ -32,6 +32,7 @@ export default function App() {
         document.body.style.position = 'fixed'
         document.body.style.width = '100%'
         await initSupabase(TG.initData)
+window.addEventListener('navigate', (e) => setTab(e.detail))
       } catch(e) {
         console.error(e)
       } finally {
