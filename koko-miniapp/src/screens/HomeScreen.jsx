@@ -58,7 +58,25 @@ export default function HomeScreen() {
         <KanjiStamp char="影" size={96} style={{ right:-8, top:-16 }} />
         <KanjiStamp char="猫" size={48} style={{ right:70, top:12, fontSize:48, opacity:0.04 }} />
 
-        <div style={{ fontSize:10, letterSpacing:3, color:'var(--smoke)', textTransform:'uppercase', marginBottom:6 }}>
+        <div style={{
+  position:'relative', overflow:'hidden',
+  background:'linear-gradient(160deg, #100c04 0%, #1a1209 60%, #2a1f0e 100%)',
+  padding:'24px 20px 20px',
+  borderBottom:'0.5px solid rgba(201,162,39,0.15)',
+  minHeight: 160,
+}}>
+  <KanjiStamp char="影" size={96} style={{ right:-8, top:-16 }} />
+
+  {/* Koko character image */}
+  <img
+    src="https://ibb.co/bM85mMYP"
+    alt="Koko"
+    style={{
+      position:'absolute', right:0, bottom:0,
+      height:'140px', width:'auto',
+      objectFit:'contain',
+      pointerEvents:'none',
+    }}>
           Nihonkai Mini App
         </div>
 
