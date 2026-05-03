@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useUser } from '../hooks/useUser'
 import { useLeaderboard } from '../hooks/useLeaderboard'
-import { TG, REFERRAL_CAP, fmtCompact, TWITTER_URL, RETWEET_URL, TG_GROUP } from '../lib/tg'
+import { TG, REFERRAL_CAP, fmtCompact, TASK_POINTS } from '../lib/tg'
 
 const KOKO_IMG   = 'https://i.postimg.cc/tgTkS4ML/8e5af09c-41df-471c-9e17-d6ae16b23ae9.png'
 const KP_PER_MIN = 2780
 
-// ── Design tokens ────────────────────────────────────────────────────────────
 const C = {
   ink:       '#0a0a0c',
   shadow:    '#111118',
@@ -20,7 +19,6 @@ const C = {
 }
 
 const styles = {
-  // Buttons
   btnPrimary: {
     flex: 1, padding: '14px 16px',
     background: 'linear-gradient(135deg, #b89a5c 0%, #c8a96e 50%, #d4b87a 100%)',
@@ -56,7 +54,6 @@ const styles = {
   dimText: { color: C.textDim },
 }
 
-// ── Progress Bar ─────────────────────────────────────────────────────────────
 function ProgressBar({ pct }) {
   return (
     <div style={{ height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
@@ -69,7 +66,6 @@ function ProgressBar({ pct }) {
   )
 }
 
-// ── Stat Card ────────────────────────────────────────────────────────────────
 function StatCard({ icon, label, value, sub, barPct }) {
   return (
     <div style={{ ...styles.card, padding: 16, flex: 1, minWidth: 0 }}>
@@ -84,21 +80,13 @@ function StatCard({ icon, label, value, sub, barPct }) {
   )
 }
 
-// ── Main ─────────────────────────────────────────────────────────────────────
-export default function HomeScreen() {
-  const { user, refCount, loading } = useUser()
-  const { board } = useLeaderboard()
-  const [kpCount, setKpCount] = useState(0)
-  const timerRef = useRef(null)
+function navigate(tab) {
+  window.dispatchEvent(new CustomEvent('navigate', { detail: { tab } }))
+}
 
-  useEffect(() => {
-    if (!user) return
-    setKpCount(user.points)
-    timerRef.current = setInterval(() => {
-      setKpCount(p => p + Math.floor(KP_PER_MIN / 60))
-    }, 1000)
-    return () => clearInterval(timerRef.current)
-  }, [user?.points])
+export default function HomeScreen() {
+  const { user, refCount, loading, activateShadowMode } = useUser()
+  const { board } = useLeaderboard()
 
   if (loading) return (
     <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -112,16 +100,24 @@ export default function HomeScreen() {
     </div>
   )
 
-  const tasksCount  = ['joined_telegram','followed_x','retweeted','lore_answered','wallet_address'].filter(t => user[t]).length
-  const totalTasks  = 5
-  const shadowOn    = user.shadow_mode_active && user.shadow_mode_expires && new Date(user.shadow_mode_expires) > new Date()
-  const myEntry     = board.find(e => e.telegram_id === user.telegram_id)
-  const myRank      = myEntry?.rank ?? '—'
-  const multiplier  = shadowOn ? 2.0 : refCount >= 10 ? 1.6 : refCount >= 5 ? 1.4 : 1.0
+  const tasksCount = ['joined_telegram','followed_x','retweeted','lore_answered','wallet_address'].filter(t => user[t]).length
+  const totalTasks = 5
+  const shadowOn   = user.shadow_mode_active && user.shadow_mode_expires && new Date(user.shadow_mode_expires) > new Date()
+  const myEntry    = board?.find(e => e.telegram_id === user.telegram_id)
+  const myRank     = myEntry?.rank ?? '—'
+  const multiplier = shadowOn ? 2.0 : refCount >= 10 ? 1.6 : refCount >= 5 ? 1.4 : 1.0
 
-  function openTask(param) {
-    try { TG.haptic('impact', 'light') } catch (e) {}
-    TG.openBot(param)
+  const canActivateShadow = refCount >= 5 && tasksCount >= 5
+
+  function handleShadowMode() {
+    try { TG.haptic('impact', 'medium') } catch {}
+    if (shadowOn) return // already active
+    if (canActivateShadow) {
+      activateShadowMode()
+    } else {
+      // Navigate to tasks to complete requirements
+      navigate('tasks')
+    }
   }
 
   return (
@@ -138,7 +134,6 @@ export default function HomeScreen() {
         borderBottom: `1px solid ${C.border}`,
         minHeight: 220,
       }}>
-        {/* Kanji watermark */}
         <div style={{
           position: 'absolute', right: 12, top: 8,
           fontFamily: "'Cinzel', serif", fontSize: 88,
@@ -146,7 +141,6 @@ export default function HomeScreen() {
           pointerEvents: 'none', userSelect: 'none',
         }}>影</div>
 
-        {/* Moon glow */}
         <div style={{
           position: 'absolute', right: 40, top: 20,
           width: 160, height: 160, borderRadius: '50%',
@@ -154,7 +148,6 @@ export default function HomeScreen() {
           pointerEvents: 'none',
         }} />
 
-        {/* Koko */}
         <img src={KOKO_IMG} alt="Koko" style={{
           position: 'absolute', right: -6, bottom: 0,
           height: 210, width: 'auto', objectFit: 'contain',
@@ -167,11 +160,15 @@ export default function HomeScreen() {
         <div style={{ padding: '16px 16px 20px', position: 'relative', zIndex: 2 }}>
 
           {/* Rank badge */}
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 10,
-            background: 'rgba(26,26,40,0.9)', border: `1px solid ${C.border}`,
-            borderRadius: 10, padding: '8px 12px', marginBottom: 20,
-          }}>
+          <div
+            onClick={() => navigate('profile')}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              background: 'rgba(26,26,40,0.9)', border: `1px solid ${C.border}`,
+              borderRadius: 10, padding: '8px 12px', marginBottom: 20,
+              cursor: 'pointer',
+            }}
+          >
             <div style={{
               width: 30, height: 30, borderRadius: 7, overflow: 'hidden',
               border: `1px solid rgba(200,169,110,0.25)`, flexShrink: 0,
@@ -186,11 +183,11 @@ export default function HomeScreen() {
             </div>
           </div>
 
-          {/* KP */}
+          {/* KP — uses live user.points which the farming ticker updates */}
           <div style={{ ...styles.labelSmall, marginBottom: 6 }}>TOTAL KP</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 6 }}>
             <span style={{ ...styles.numLarge, fontSize: 36 }}>
-              {kpCount.toLocaleString()}
+              {(user.points ?? 0).toLocaleString()}
             </span>
             <span style={{ fontFamily: "'Cinzel', serif", fontSize: 16, color: C.gold, fontWeight: 600 }}>KP</span>
           </div>
@@ -202,7 +199,7 @@ export default function HomeScreen() {
           {/* CTA Buttons */}
           <div style={{ display: 'flex', gap: 10, paddingRight: 130 }}>
             <button
-              onClick={() => openTask('tasks')}
+              onClick={() => { try { TG.haptic('impact', 'light') } catch {} navigate('tasks') }}
               style={styles.btnPrimary}
               onTouchStart={e => e.currentTarget.style.opacity = '0.85'}
               onTouchEnd={e => e.currentTarget.style.opacity = '1'}
@@ -214,15 +211,22 @@ export default function HomeScreen() {
               </div>
             </button>
             <button
-              onClick={() => openTask('shadow_mode')}
-              style={styles.btnSecondary}
+              onClick={handleShadowMode}
+              style={{
+                ...styles.btnSecondary,
+                ...(shadowOn ? { borderColor: C.gold, background: 'rgba(200,169,110,0.08)' } : {}),
+              }}
               onTouchStart={e => e.currentTarget.style.borderColor = C.gold}
-              onTouchEnd={e => e.currentTarget.style.borderColor = C.border}
+              onTouchEnd={e => e.currentTarget.style.borderColor = shadowOn ? C.gold : C.border}
             >
               <span style={{ fontSize: 14, color: C.gold }}>◎</span>
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontFamily: "'Cinzel', serif", fontSize: 11, color: C.textMain, letterSpacing: 0.5 }}>SHADOW MODE</div>
-                <div style={{ ...styles.labelSmall, color: C.textDim, marginTop: 2 }}>Unleash Koko's true power</div>
+                <div style={{ fontFamily: "'Cinzel', serif", fontSize: 11, color: shadowOn ? C.gold : C.textMain, letterSpacing: 0.5 }}>
+                  {shadowOn ? 'SHADOW ACTIVE' : 'SHADOW MODE'}
+                </div>
+                <div style={{ ...styles.labelSmall, color: C.textDim, marginTop: 2 }}>
+                  {shadowOn ? '2× KP enabled' : 'Unleash Koko\'s true power'}
+                </div>
               </div>
             </button>
           </div>
@@ -262,7 +266,6 @@ export default function HomeScreen() {
           ...styles.card,
           marginBottom: 16, overflow: 'hidden', position: 'relative',
         }}>
-          {/* Koko image on the right */}
           <img src={KOKO_IMG} alt="" style={{
             position: 'absolute', right: -10, top: '50%', transform: 'translateY(-50%)',
             height: 130, width: 'auto', objectFit: 'contain',
@@ -272,7 +275,6 @@ export default function HomeScreen() {
           }} />
 
           <div style={{ padding: '18px 20px 16px', position: 'relative', zIndex: 1 }}>
-            {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
               <div style={{
                 fontFamily: "'Cinzel', serif", fontSize: 28,
@@ -281,7 +283,7 @@ export default function HomeScreen() {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ fontFamily: "'Cinzel', serif", fontSize: 13, color: C.gold, letterSpacing: 1 }}>SHADOW MODE</span>
-                  <span style={{ fontSize: 12, color: C.textDim }}>🔒</span>
+                  <span style={{ fontSize: 12, color: shadowOn ? C.gold : C.textDim }}>{shadowOn ? '✓' : '🔒'}</span>
                 </div>
                 <div style={{ fontSize: 11, color: C.textDim, marginTop: 2, lineHeight: 1.5 }}>
                   Unleash Koko's full potential.<br/>2X KP. 2X Profit. 24 Hours.
@@ -291,9 +293,7 @@ export default function HomeScreen() {
 
             <div style={{ height: 1, background: C.border, margin: '14px 0' }} />
 
-            {/* Requirements */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 14 }}>
-              {/* Referrals */}
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                   <span style={{ fontSize: 11, color: C.textDim }}>👥</span>
@@ -304,7 +304,6 @@ export default function HomeScreen() {
                 </div>
                 <ProgressBar pct={(Math.min(refCount, 5) / 5) * 100} />
               </div>
-              {/* Tasks */}
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                   <span style={{ fontSize: 11, color: C.textDim }}>◎</span>
@@ -317,25 +316,28 @@ export default function HomeScreen() {
               </div>
             </div>
 
-            {/* Lock button */}
             <button
-              onClick={() => openTask('shadow_mode')}
+              onClick={handleShadowMode}
               style={{
                 width: '100%', padding: '11px',
                 background: shadowOn
                   ? `linear-gradient(135deg, ${C.goldSoft}, ${C.gold})`
+                  : canActivateShadow
+                  ? `linear-gradient(135deg, rgba(184,154,92,0.2), rgba(200,169,110,0.2))`
                   : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${shadowOn ? C.gold : C.border}`,
+                border: `1px solid ${shadowOn ? C.gold : canActivateShadow ? 'rgba(200,169,110,0.5)' : C.border}`,
                 borderRadius: 8, cursor: 'pointer', touchAction: 'manipulation',
                 fontFamily: "'Cinzel', serif", fontSize: 11,
-                color: shadowOn ? '#0a0a0c' : C.textDim,
+                color: shadowOn ? '#0a0a0c' : canActivateShadow ? C.gold : C.textDim,
                 letterSpacing: 1, marginBottom: 8,
               }}
             >
-              🔒 {shadowOn ? 'ACTIVE' : 'LOCKED — COMPLETE REQUIREMENTS'}
+              {shadowOn ? '◎ ACTIVE — 2× KP RUNNING' : canActivateShadow ? '◎ ACTIVATE SHADOW MODE' : '🔒 LOCKED — COMPLETE REQUIREMENTS'}
             </button>
             <div style={{ textAlign: 'center', ...styles.labelSmall, color: C.textDim }}>
-              Reward: 2× KP for 24 hours
+              {shadowOn
+                ? `Expires: ${new Date(user.shadow_mode_expires).toLocaleTimeString()}`
+                : 'Reward: 2× KP for 24 hours'}
             </div>
           </div>
         </div>
