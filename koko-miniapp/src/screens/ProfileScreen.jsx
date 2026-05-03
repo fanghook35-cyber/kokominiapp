@@ -238,22 +238,22 @@ const CardTitle = ({ icon, label }) => (
 );
 
 const TaskRow = ({ icon, name, kp, done }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "13px 18px", borderBottom: `1px solid rgba(200,169,110,0.06)` }}>
+  <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 14px", borderBottom: `1px solid rgba(200,169,110,0.06)` }}>
     <div style={{ width: 28, height: 28, borderRadius: 6, background: C.bg2, border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: C.textMuted }}>
       {icon}
     </div>
-    <div style={{ flex: 1, fontSize: 11, color: C.textDim, letterSpacing: "0.02em" }}>{name}</div>
-    <div style={{ fontSize: 10, color: C.goldDim, letterSpacing: "0.06em", flexShrink: 0 }}>{kp}</div>
+    <div style={{ flex: 1, fontSize: 11, color: C.textDim, letterSpacing: "0.02em", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</div>
+    <div style={{ fontSize: 10, color: C.goldDim, letterSpacing: "0.04em", flexShrink: 0 }}>{kp}</div>
     <div style={{
-      display: "flex", alignItems: "center", gap: 5,
-      borderRadius: 5, padding: "5px 10px", fontSize: 8, letterSpacing: "0.12em",
+      display: "flex", alignItems: "center", gap: 4,
+      borderRadius: 5, padding: "5px 8px", fontSize: 8, letterSpacing: "0.08em",
       textTransform: "uppercase", flexShrink: 0,
       background: done ? C.greenDim : C.goldFaint,
       border: `1px solid ${done ? "rgba(74,154,106,0.25)" : "rgba(200,169,110,0.18)"}`,
       color: done ? "#5ab87a" : C.goldDim,
     }}>
       {done ? <CheckIcon /> : <CircleIcon />}
-      {done ? "Completed" : "Pending"}
+      {done ? "Done" : "Pending"}
     </div>
   </div>
 );
@@ -368,37 +368,35 @@ export default function ProfileScreen() {
         {/* ── WALLET ── */}
         <div style={s.card}>
           <CardTitle label="Wallet" icon={<Icon size={16} vb="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" /></Icon>} />
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, alignItems: "center" }}>
-            <div>
-              <div style={{ fontSize: 9, letterSpacing: "0.12em", color: C.textMuted, textTransform: "uppercase", marginBottom: 8 }}>Connected Wallet</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ background: C.bg2, border: `1px solid ${C.border2}`, borderRadius: 6, padding: "10px 14px", fontSize: 11, color: C.textDim, letterSpacing: "0.04em", flex: 1 }}>F48NUFEW...b7jemX</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(200,169,110,0.07)", border: `1px solid rgba(200,169,110,0.2)`, borderRadius: 6, padding: "10px 12px", fontSize: 9, letterSpacing: "0.14em", color: C.goldDim, textTransform: "uppercase", whiteSpace: "nowrap" }}>
-                  <Icon size={11} vb="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></Icon>
-                  Locked
-                </div>
-              </div>
-            </div>
-            <div style={{ textAlign: "right" }}>
-              <Icon size={22} vb="0 0 24 24" stroke="rgba(200,169,110,0.3)"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></Icon>
-              <div style={{ fontSize: 10, color: C.textDim, lineHeight: 1.7, marginTop: 6 }}>Wallet address is permanent<br />and cannot be changed.</div>
-              <div style={{ fontSize: 9, color: C.goldDim, marginTop: 3 }}>Used for token distribution.</div>
+          <div style={{ fontSize: 9, letterSpacing: "0.12em", color: C.textMuted, textTransform: "uppercase", marginBottom: 8 }}>Connected Wallet</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+            <div style={{ background: C.bg2, border: `1px solid ${C.border2}`, borderRadius: 6, padding: "10px 14px", fontSize: 11, color: C.textDim, letterSpacing: "0.04em", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>F48NUFEW...b7jemX</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(200,169,110,0.07)", border: `1px solid rgba(200,169,110,0.2)`, borderRadius: 6, padding: "10px 12px", fontSize: 9, letterSpacing: "0.14em", color: C.goldDim, textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <Icon size={11} vb="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></Icon>
+              Locked
             </div>
           </div>
+          <div style={{ fontSize: 9, color: C.textDim, lineHeight: 1.7 }}>Wallet address is permanent and cannot be changed.</div>
+          <div style={{ fontSize: 9, color: C.goldDim, marginTop: 3 }}>Used for token distribution.</div>
         </div>
 
         {/* ── TOKENS + REFERRAL ── */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, margin: "0 16px 10px" }}>
           {/* Tokens */}
-          <div style={{ background: C.panel, border: `1px solid ${C.border}`, borderRadius: 12, padding: 18, position: "relative", overflow: "hidden" }}>
-            <CardTitle label="Tokens" icon={<Icon size={15} vb="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 8v8M8 12h8" /></Icon>} />
-            <div style={{ position: "absolute", right: 14, top: 14, width: 42, height: 42, borderRadius: "50%", background: "radial-gradient(circle at 35% 30%, #3a2e10, #1a1508)", border: `1px solid rgba(200,169,110,0.3)`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Noto Serif JP', serif", fontSize: 17, color: "rgba(200,169,110,0.7)" }}>影</div>
+          <div style={{ background: C.panel, border: `1px solid ${C.border}`, borderRadius: 12, padding: 18, position: "relative" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, color: C.goldDim }}>
+                <Icon size={15} vb="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 8v8M8 12h8" /></Icon>
+                <span style={{ fontFamily: "'Cinzel', serif", fontSize: 14, fontWeight: 500, color: C.gold, letterSpacing: "0.06em" }}>Tokens</span>
+              </div>
+              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "radial-gradient(circle at 35% 30%, #3a2e10, #1a1508)", border: `1px solid rgba(200,169,110,0.3)`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Noto Serif JP', serif", fontSize: 15, color: "rgba(200,169,110,0.7)", flexShrink: 0 }}>影</div>
+            </div>
             <div style={{ fontSize: 8, letterSpacing: "0.12em", color: C.textMuted, textTransform: "uppercase", marginBottom: 6 }}>Allocated Tokens</div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 5, marginBottom: 14 }}>
               <span style={{ fontFamily: "'Cinzel', serif", fontSize: 30, fontWeight: 600, color: C.gold, lineHeight: 1 }}>380</span>
               <span style={{ fontSize: 11, color: C.goldDim, letterSpacing: "0.08em" }}>$KOKO</span>
             </div>
-            <button style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(200,169,110,0.06)", border: `1px solid rgba(200,169,110,0.16)`, borderRadius: 6, padding: 9, fontSize: 8, letterSpacing: "0.12em", color: C.goldDim, textTransform: "uppercase", cursor: "pointer", width: "100%", fontFamily: "'Space Mono', monospace" }}>
+            <button style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(200,169,110,0.06)", border: `1px solid rgba(200,169,110,0.16)`, borderRadius: 6, padding: 9, fontSize: 8, letterSpacing: "0.12em", color: C.goldDim, textTransform: "uppercase", cursor: "pointer", width: "100%", fontFamily: "'Space Mono', monospace", boxSizing: "border-box" }}>
               <Icon size={11} vb="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></Icon>
               View Token Details
             </button>
