@@ -161,7 +161,9 @@ function navigate(tab) {
 
 export default function ProfileScreen() {
   const { user, refCount, loading } = useUser()
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied]       = useState(false)
+  const [simRef, setSimRef]       = useState(null) // null = use real refCount
+  const displayRef = simRef !== null ? simRef : refCount
 
   if (loading || !user) return (
     <div style={{ ...s.app, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -228,9 +230,10 @@ export default function ProfileScreen() {
           {
             icon: <Icon size={12} vb="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></Icon>,
             label: "Referrals",
-            value: String(refCount),
-            sub: refCount < 5 ? `Next bonus: 5` : 'Bonus active',
-            pct: (refCount / REFERRAL_CAP) * 100,
+            value: String(displayRef),
+            sub: displayRef < 5 ? `Next bonus: 5` : 'Bonus active',
+            pct: (displayRef / REFERRAL_CAP) * 100,
+            simulator: true,
           },
           {
             icon: <Icon size={12} vb="0 0 24 24"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></Icon>,
@@ -239,7 +242,7 @@ export default function ProfileScreen() {
             sub: tasksCompleted >= totalTasks ? 'All done' : 'In progress',
             pct: (tasksCompleted / totalTasks) * 100,
           },
-        ].map(({ icon, label, value, sub, pct }) => (
+        ].map(({ icon, label, value, sub, pct, simulator }) => (
           <div key={label} style={{ background: C.panel, border: `1px solid ${C.border}`, borderRadius: 8, padding: "14px 12px 12px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, color: C.goldDim }}>
               {icon}
@@ -248,6 +251,18 @@ export default function ProfileScreen() {
             <div style={{ fontFamily: "'Cinzel', serif", fontSize: value.includes("/") ? 20 : 24, fontWeight: 600, color: C.text, lineHeight: 1, marginBottom: 2 }}>{value}</div>
             <div style={{ fontSize: 8, letterSpacing: "0.1em", color: C.textMuted, textTransform: "uppercase" }}>{sub}</div>
             <StatBar pct={pct} />
+            {simulator && (
+              <div style={{ display: "flex", gap: 4, marginTop: 8 }}>
+                <button
+                  onClick={() => setSimRef(r => Math.max(0, (r !== null ? r : refCount) - 1))}
+                  style={{ flex: 1, padding: "4px 0", background: "rgba(200,169,110,0.06)", border: `1px solid ${C.border}`, borderRadius: 4, color: C.goldDim, fontSize: 13, cursor: "pointer", lineHeight: 1 }}
+                >−</button>
+                <button
+                  onClick={() => setSimRef(r => Math.min(REFERRAL_CAP, (r !== null ? r : refCount) + 1))}
+                  style={{ flex: 1, padding: "4px 0", background: "rgba(200,169,110,0.06)", border: `1px solid ${C.border}`, borderRadius: 4, color: C.goldDim, fontSize: 13, cursor: "pointer", lineHeight: 1 }}
+                >+</button>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -326,7 +341,7 @@ export default function ProfileScreen() {
           <div style={{ fontSize: 9, color: C.textMuted, letterSpacing: "0.06em", marginBottom: 10 }}>Invite more villagers. Earn more KP.</div>
           <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 9, letterSpacing: "0.08em", color: C.goldDim }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="rgba(200,169,110,0.5)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
-            +{fmt(TASK_POINTS.referral)} KP per referral
+            {displayRef} / {REFERRAL_CAP} referrals · +{fmt(TASK_POINTS.referral)} KP each
           </div>
         </div>
       </div>
