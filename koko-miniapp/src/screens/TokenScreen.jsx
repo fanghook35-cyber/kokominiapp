@@ -88,7 +88,7 @@ export default function TokenScreen() {
           <div style={{
             borderRadius: 14, border: `0.5px solid ${C.goldBorder}`,
             overflow: "hidden", position: "relative",
-            background: "#0c0c10", minHeight: 280,
+            background: "#0c0c10",
           }}>
             {/* Hero image */}
             <img
@@ -174,29 +174,40 @@ export default function TokenScreen() {
           <div style={{
             background: C.panel, border: `0.5px solid ${C.goldBorder}`,
             borderRadius: 14, padding: 16,
-            display: "flex", alignItems: "center", gap: 14,
-            position: "relative", overflow: "hidden",
+            display: "flex", alignItems: "center", gap: 12,
+            position: "relative",
           }}>
-            <AllocSeal />
+            {/* Seal - smaller so it doesn't crowd */}
+            <div style={{ width: 64, height: 64, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+              <svg viewBox="0 0 80 80" fill="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+                <circle cx="40" cy="40" r="36" stroke="rgba(200,169,110,0.3)" strokeWidth="1"/>
+                <circle cx="40" cy="40" r="30" stroke="rgba(200,169,110,0.15)" strokeWidth="0.5"/>
+                <line x1="40" y1="5"  x2="40" y2="11" stroke="rgba(200,169,110,0.4)" strokeWidth="1"/>
+                <line x1="40" y1="69" x2="40" y2="75" stroke="rgba(200,169,110,0.4)" strokeWidth="1"/>
+                <line x1="5"  y1="40" x2="11" y2="40" stroke="rgba(200,169,110,0.4)" strokeWidth="1"/>
+                <line x1="69" y1="40" x2="75" y2="40" stroke="rgba(200,169,110,0.4)" strokeWidth="1"/>
+              </svg>
+              <span style={{ fontFamily: "'Cinzel', serif", fontSize: 22, color: C.gold, position: "relative", zIndex: 1, lineHeight: 1 }}>影</span>
+            </div>
 
             {/* Center */}
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: "2px", color: C.muted, textTransform: "uppercase", marginBottom: 4 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, letterSpacing: "2px", color: C.muted, textTransform: "uppercase", marginBottom: 2 }}>
                 Your Allocation
               </div>
-              <div style={{ fontFamily: "'Cinzel', serif", fontSize: 40, fontWeight: 500, color: C.gold, lineHeight: 1, marginBottom: 2 }}>
+              <div style={{ fontFamily: "'Cinzel', serif", fontSize: 34, fontWeight: 500, color: C.gold, lineHeight: 1, marginBottom: 1 }}>
                 380
               </div>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: C.smoke, marginBottom: 8 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: C.smoke, marginBottom: 6 }}>
                 $KOKO
               </div>
               <div style={{
                 display: "inline-flex", alignItems: "center", gap: 5,
                 border: `0.5px solid ${C.border}`, borderRadius: 20,
-                padding: "3px 10px", fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 10, color: C.smoke,
+                padding: "3px 8px", fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 9, color: C.smoke, maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
               }}>
-                <span style={{ color: C.success, fontSize: 10 }}>✓</span>
+                <span style={{ color: C.success }}>✓</span>
                 F48NUFEW...b7jemX
               </div>
             </div>
@@ -204,9 +215,9 @@ export default function TokenScreen() {
             {/* Right */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, flexShrink: 0 }}>
               <LockIcon />
-              <div style={{ fontSize: 10, color: C.smoke, textAlign: "right", lineHeight: 1.4 }}>
+              <div style={{ fontSize: 9, color: C.smoke, textAlign: "right", lineHeight: 1.5 }}>
                 Allocation Locked
-                <span style={{ color: C.gold, fontSize: 10, display: "block" }}>Wallet Submitted</span>
+                <span style={{ color: C.gold, fontSize: 9, display: "block" }}>Wallet Submitted</span>
               </div>
             </div>
           </div>
