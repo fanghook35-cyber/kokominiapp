@@ -108,7 +108,7 @@ const C = {
 };
 
 const s = {
-  app: { maxWidth: 420, margin: "0 auto", minHeight: "100vh", background: C.bg, fontFamily: "'Space Mono', monospace", paddingBottom: 80, color: C.text, WebkitFontSmoothing: "antialiased" },
+  app: { maxWidth: 420, margin: "0 auto", background: C.bg, fontFamily: "'Space Mono', monospace", paddingBottom: 80, color: C.text, WebkitFontSmoothing: "antialiased" },
   card: { margin: "0 16px 10px", background: C.panel, border: `1px solid ${C.border}`, borderRadius: 12, padding: 18 },
 };
 
@@ -208,7 +208,7 @@ export default function ProfileScreen() {
                 </div>
               </div>
             </div>
-            <div style={{ paddingTop: 4, transform: "scale(0.78)", transformOrigin: "top center" }}>
+            <div style={{ flexShrink: 0, transform: "scale(0.78)", transformOrigin: "top right", marginBottom: "-22%" }}>
               <VillageBadge level={userLevel} />
             </div>
           </div>
