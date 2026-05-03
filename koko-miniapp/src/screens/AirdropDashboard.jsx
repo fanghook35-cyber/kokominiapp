@@ -89,7 +89,7 @@ const CSS = `
   background: var(--ink);
   color: var(--light);
   font-family: 'Noto Serif JP', serif;
-  min-height: 100vh;
+  min-height: 100%;
   overflow-x: hidden;
   position: relative;
 }
@@ -916,32 +916,72 @@ export default function AirdropDashboard() {
   const tabs = ['dashboard', 'tasks', 'economy', 'bot'];
   const tabLabels = { dashboard: 'Dashboard', tasks: 'Tasks', economy: 'Economy', bot: 'Bot Logic' };
 
+  // Hide top nav inside Telegram webview
+  const inTelegram = typeof window !== 'undefined' && !!window.Telegram?.WebApp?.initData;
+
   return (
     <div className="kk-root">
       <div className="kk-grain" />
       <div className="kk-ambient" />
 
-      {/* NAV */}
-      <nav className="kk-nav">
-        <div className="kk-nav-brand">
-          <span className="kk-kanji-lg">影</span>
-          <div>
-            <div className="kk-nav-title">Kairoku World</div>
-            <div className="kk-nav-sub">$KOKO · Airdrop System</div>
+      {/* TOP NAV — hidden inside Telegram */}
+      {!inTelegram && (
+        <nav className="kk-nav">
+          <div className="kk-nav-brand">
+            <span className="kk-kanji-lg">影</span>
+            <div>
+              <div className="kk-nav-title">Kairoku World</div>
+              <div className="kk-nav-sub">$KOKO · Airdrop System</div>
+            </div>
           </div>
-        </div>
-        <div className="kk-nav-tabs">
+          <div className="kk-nav-tabs">
+            {tabs.map(t => (
+              <button
+                key={t}
+                className={`kk-tab${activeTab === t ? ' active' : ''}`}
+                onClick={() => setActiveTab(t)}
+              >
+                {tabLabels[t]}
+              </button>
+            ))}
+          </div>
+        </nav>
+      )}
+
+      {/* INLINE TAB STRIP — shown only inside Telegram */}
+      {inTelegram && (
+        <div style={{
+          display: 'flex',
+          borderBottom: '1px solid var(--border)',
+          background: 'rgba(10,10,12,0.95)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+        }}>
           {tabs.map(t => (
             <button
               key={t}
-              className={`kk-tab${activeTab === t ? ' active' : ''}`}
               onClick={() => setActiveTab(t)}
+              style={{
+                flex: 1,
+                background: 'none',
+                border: 'none',
+                borderBottom: activeTab === t ? '2px solid var(--gold)' : '2px solid transparent',
+                color: activeTab === t ? 'var(--gold)' : 'var(--dim)',
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: '0.6rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                padding: '0.75rem 0.25rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
             >
               {tabLabels[t]}
             </button>
           ))}
         </div>
-      </nav>
+      )}
 
       {/* PAGES */}
       {activeTab === 'dashboard' && <DashboardPage user={user} onComplete={handleComplete} onCopyRef={handleCopyRef} onCheckin={handleCheckin} onAddReferral={handleAddReferral} refLink={refLink} />}
