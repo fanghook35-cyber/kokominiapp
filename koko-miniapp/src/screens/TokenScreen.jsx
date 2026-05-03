@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 
 const C = {
   ink:       "#0a0a0c",
@@ -54,7 +54,6 @@ const AllocSeal = () => (
 // ── Main Component ────────────────────────────────────────────────────
 
 export default function TokenScreen() {
-  const [buying, setBuying] = useState(false);
 
   return (
     <>
@@ -151,7 +150,7 @@ export default function TokenScreen() {
 
               {/* CTA */}
               <button
-                onClick={() => setBuying(true)}
+                onClick={() => window.open("http://moonpay.hel.io/x/Kairokuworld", "_blank")}
                 style={{
                   display: "block", width: "100%", padding: "13px 0",
                   background: "linear-gradient(135deg, #c8a96e, #a8893e)",
