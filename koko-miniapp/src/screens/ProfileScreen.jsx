@@ -258,13 +258,7 @@ const TaskRow = ({ icon, name, kp, done }) => (
   </div>
 );
 
-const NavItem = ({ icon, label, active }) => (
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, cursor: "pointer", position: "relative" }}>
-    <span style={{ color: active ? C.gold : C.textMuted }}>{icon}</span>
-    <span style={{ fontSize: 8, letterSpacing: "0.12em", color: active ? C.gold : C.textMuted, textTransform: "uppercase" }}>{label}</span>
-    {active && <div style={{ position: "absolute", bottom: -10, width: 24, height: 2, background: C.gold, borderRadius: 1 }} />}
-  </div>
-);
+
 
 // ── Main Component ───────────────────────────────────────────────────
 export default function ProfileScreen() {
@@ -443,14 +437,7 @@ export default function ProfileScreen() {
           </div>
         </div>
 
-        {/* ── BOTTOM NAV ── */}
-        <nav style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 420, background: "#0f0f14", borderTop: `1px solid ${C.border}`, display: "grid", gridTemplateColumns: "repeat(5,1fr)", padding: "10px 0 16px", zIndex: 100 }}>
-          <NavItem label="Home" icon={<Icon size={20} vb="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></Icon>} />
-          <NavItem label="Missions" icon={<Icon size={20} vb="0 0 24 24"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></Icon>} />
-          <NavItem label="Rank" icon={<Icon size={20} vb="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></Icon>} />
-          <NavItem label="Token" icon={<Icon size={20} vb="0 0 24 24"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" /></Icon>} />
-          <NavItem active label="Profile" icon={<Icon size={20} vb="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></Icon>} />
-        </nav>
+
 
       </div>
     </>
