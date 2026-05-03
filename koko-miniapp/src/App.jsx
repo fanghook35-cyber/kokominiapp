@@ -2,21 +2,19 @@ import React, { useState, useEffect } from 'react'
 import { KatakanaLoader } from './components/UI'
 import BottomNav from './components/BottomNav'
 import HomeScreen from './screens/HomeScreen'
-import TasksScreen from './screens/TasksScreen'
+import AirdropDashboard from './screens/AirdropDashboard'
 import LeaderboardScreen from './screens/LeaderboardScreen'
 import TokenScreen from './screens/TokenScreen'
 import ProfileScreen from './screens/ProfileScreen'
-import AirdropDashboard from './screens/AirdropDashboard'
 import { initSupabase } from './lib/supabase'
 import { TG } from './lib/tg'
 
 const SCREENS = {
   home:        HomeScreen,
-  tasks:       TasksScreen,
+  tasks:       AirdropDashboard,
   leaderboard: LeaderboardScreen,
   token:       TokenScreen,
   profile:     ProfileScreen,
-  airdrop:     AirdropDashboard,
 }
 
 export default function App() {
@@ -28,7 +26,6 @@ export default function App() {
       try {
         TG.ready()
         TG.expand()
-        // Disable bounce/scroll interference in Telegram webview
         document.body.style.overflow = 'hidden'
         document.documentElement.style.overflow = 'hidden'
         document.body.style.position = 'fixed'
