@@ -6,6 +6,7 @@ import TasksScreen from './screens/TasksScreen'
 import LeaderboardScreen from './screens/LeaderboardScreen'
 import TokenScreen from './screens/TokenScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import AirdropDashboard from './screens/AirdropDashboard'
 import { initSupabase } from './lib/supabase'
 import { TG } from './lib/tg'
 
@@ -15,6 +16,7 @@ const SCREENS = {
   leaderboard: LeaderboardScreen,
   token:       TokenScreen,
   profile:     ProfileScreen,
+  airdrop:     AirdropDashboard,
 }
 
 export default function App() {
@@ -32,7 +34,7 @@ export default function App() {
         document.body.style.position = 'fixed'
         document.body.style.width = '100%'
         await initSupabase(TG.initData)
-window.addEventListener('navigate', (e) => setTab(e.detail))
+        window.addEventListener('navigate', (e) => setTab(e.detail))
       } catch(e) {
         console.error(e)
       } finally {
