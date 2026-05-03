@@ -22,6 +22,11 @@ export default function App() {
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
+    function handleNavigate(e) {
+      const next = e.detail?.tab ?? e.detail
+      if (next && SCREENS[next]) setTab(next)
+    }
+
     async function boot() {
       try {
         TG.ready()
@@ -31,14 +36,16 @@ export default function App() {
         document.body.style.position = 'fixed'
         document.body.style.width = '100%'
         await initSupabase(TG.initData)
-        window.addEventListener('navigate', (e) => setTab(e.detail))
+        window.addEventListener('navigate', handleNavigate)
       } catch(e) {
         console.error(e)
       } finally {
         setReady(true)
       }
     }
+
     boot()
+    return () => window.removeEventListener('navigate', handleNavigate)
   }, [])
 
   function handleTabChange(id) {
@@ -58,7 +65,6 @@ export default function App() {
 
   return (
     <div style={{
-      height: '100vh',
       height: '100dvh',
       display: 'flex',
       flexDirection: 'column',
