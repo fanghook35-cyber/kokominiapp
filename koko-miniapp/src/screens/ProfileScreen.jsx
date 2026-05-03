@@ -396,7 +396,6 @@ function hexToRgb(hex) {
   const b = parseInt(h.slice(4, 6), 16);
   return `${r},${g},${b}`;
 }
-        </div>
 
         {/* ── STATS ── */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, margin: "0 16px 10px" }}>
