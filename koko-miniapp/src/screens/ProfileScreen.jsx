@@ -1,5 +1,152 @@
-import { useState } from "react";
-import VillageBadge from "./VillageBadge";
+import { useState, useMemo } from "react";
+
+// ── VillageBadge (inlined) ────────────────────────────────────────────
+
+const TIERS = [
+  { min: 1,  max: 10, name: "Initiate",       color: "#8a7a5a", glow: "rgba(138,122,90,0.15)",  bg: "linear-gradient(160deg,#1a1810 0%,#0f0e09 100%)" },
+  { min: 11, max: 25, name: "Villager",        color: "#c8a96e", glow: "rgba(200,169,110,0.18)", bg: "linear-gradient(160deg,#1e1c10 0%,#111009 100%)" },
+  { min: 26, max: 50, name: "Shadow Disciple", color: "#9eada8", glow: "rgba(158,173,168,0.15)", bg: "linear-gradient(160deg,#141c1a 0%,#0a100f 100%)" },
+  { min: 51, max: 75, name: "Elite Shadow",    color: "#a892c8", glow: "rgba(168,146,200,0.18)", bg: "linear-gradient(160deg,#18141e 0%,#0e0a14 100%)" },
+  { min: 76, max: 99, name: "Kairoku Master",  color: "#d4b870", glow: "rgba(212,184,112,0.22)", bg: "linear-gradient(160deg,#1e1a0a 0%,#130f06 100%)" },
+];
+
+function getTier(level) {
+  return TIERS.find(t => level >= t.min && level <= t.max) || TIERS[0];
+}
+
+function hexToRgb(hex) {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return `${r},${g},${b}`;
+}
+
+const Diamond = ({ size = 7, color }) => (
+  <svg width={size} height={size} viewBox="0 0 10 10" fill={color}>
+    <polygon points="5,0 10,5 5,10 0,5" />
+  </svg>
+);
+
+const CornerAccents = ({ color }) => {
+  const c = { position: "absolute", width: 10, height: 10 };
+  const line = { position: "absolute", background: color, borderRadius: 1 };
+  return (
+    <>
+      <div style={{ ...c, top: 8, left: 8 }}>
+        <div style={{ ...line, width: 10, height: 1.5, top: 0, left: 0 }} />
+        <div style={{ ...line, width: 1.5, height: 10, top: 0, left: 0 }} />
+      </div>
+      <div style={{ ...c, top: 8, right: 8 }}>
+        <div style={{ ...line, width: 10, height: 1.5, top: 0, right: 0 }} />
+        <div style={{ ...line, width: 1.5, height: 10, top: 0, right: 0 }} />
+      </div>
+      <div style={{ ...c, bottom: 8, left: 8 }}>
+        <div style={{ ...line, width: 10, height: 1.5, bottom: 0, left: 0 }} />
+        <div style={{ ...line, width: 1.5, height: 10, bottom: 0, left: 0 }} />
+      </div>
+      <div style={{ ...c, bottom: 8, right: 8 }}>
+        <div style={{ ...line, width: 10, height: 1.5, bottom: 0, right: 0 }} />
+        <div style={{ ...line, width: 1.5, height: 10, bottom: 0, right: 0 }} />
+      </div>
+    </>
+  );
+};
+
+function VillageBadge({ level = 18 }) {
+  const tier = useMemo(() => getTier(level), [level]);
+  const gold = tier.color;
+  const goldMid = `rgba(${hexToRgb(gold)},0.35)`;
+
+  return (
+    <div style={{
+      position: "relative",
+      width: 140,
+      background: tier.bg,
+      border: `1px solid ${goldMid}`,
+      borderRadius: 10,
+      padding: "18px 14px 16px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: 0,
+      boxShadow: `inset 0 0 0 1px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.6), 0 0 1px 1px rgba(0,0,0,0.8)`,
+      userSelect: "none",
+    }}>
+      <CornerAccents color={goldMid} />
+
+      <div style={{ marginBottom: 10 }}>
+        <Diamond size={8} color={goldMid} />
+      </div>
+
+      {/* Symbol circle */}
+      <div style={{ position: "relative", width: 82, height: 82, marginBottom: 14 }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          borderRadius: "50%",
+          border: `1.5px solid ${goldMid}`,
+          background: `radial-gradient(circle at 40% 35%, rgba(${hexToRgb(gold)},0.08), rgba(0,0,0,0.6))`,
+        }} />
+        <div style={{
+          position: "absolute", inset: 6,
+          borderRadius: "50%",
+          border: `1px solid rgba(${hexToRgb(gold)},0.18)`,
+        }} />
+        {[
+          { top: -5, left: "50%", transform: "translateX(-50%)" },
+          { bottom: -5, left: "50%", transform: "translateX(-50%)" },
+          { left: -5, top: "50%", transform: "translateY(-50%)" },
+          { right: -5, top: "50%", transform: "translateY(-50%)" },
+        ].map((pos, i) => (
+          <div key={i} style={{ position: "absolute", ...pos }}>
+            <Diamond size={10} color={gold} />
+          </div>
+        ))}
+        <div style={{
+          position: "absolute", inset: 0,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily: "'Noto Serif JP', serif",
+          fontSize: 36, fontWeight: 700, color: gold,
+          textShadow: `0 0 20px ${tier.glow}`,
+          lineHeight: 1,
+        }}>
+          影
+        </div>
+      </div>
+
+      <div style={{
+        fontFamily: "'Cinzel', serif",
+        fontSize: tier.name.length > 12 ? 10 : 12,
+        fontWeight: 500, color: gold,
+        letterSpacing: "0.12em", textTransform: "uppercase",
+        textAlign: "center", marginBottom: 8, lineHeight: 1.3,
+      }}>
+        {tier.name}
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, width: "100%" }}>
+        <div style={{ flex: 1, height: 1, background: `linear-gradient(90deg, transparent, ${goldMid})` }} />
+        <Diamond size={5} color={goldMid} />
+        <div style={{ flex: 1, height: 1, background: `linear-gradient(90deg, ${goldMid}, transparent)` }} />
+      </div>
+
+      <div style={{
+        fontFamily: "'Cinzel', serif",
+        fontSize: 11,
+        color: `rgba(${hexToRgb(gold)},0.65)`,
+        letterSpacing: "0.18em", textTransform: "uppercase",
+      }}>
+        LV {level}
+      </div>
+
+      <div style={{ marginTop: 10 }}>
+        <Diamond size={8} color={goldMid} />
+      </div>
+    </div>
+  );
+}
+
+// ── ProfileScreen ─────────────────────────────────────────────────────
 
 const C = {
   bg:        "#0a0a0c",
@@ -38,7 +185,6 @@ const s = {
   },
 };
 
-// ── Icons ────────────────────────────────────────────────────────────
 const Icon = ({ d, size = 16, fill = false, stroke = "currentColor", vb = "0 0 24 24", children }) => (
   <svg width={size} height={size} viewBox={vb} fill={fill ? "currentColor" : "none"}
     stroke={fill ? "none" : stroke} strokeWidth={1.8} style={{ flexShrink: 0 }}>
@@ -58,7 +204,6 @@ const CircleIcon = ({ size = 9 }) => (
   </svg>
 );
 
-// ── Koko Cat Avatar SVG ──────────────────────────────────────────────
 const KokoAvatar = () => (
   <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="56" height="56">
     <ellipse cx="40" cy="48" rx="22" ry="24" fill="#1a1a2a" />
@@ -79,9 +224,6 @@ const KokoAvatar = () => (
   </svg>
 );
 
-
-
-// ── Sub-components ───────────────────────────────────────────────────
 const StatBar = ({ pct }) => (
   <div style={{ height: 2, background: "rgba(255,255,255,0.06)", borderRadius: 1, overflow: "hidden", marginTop: 8 }}>
     <div style={{ height: "100%", width: `${pct}%`, background: `linear-gradient(90deg, rgba(200,169,110,0.45), rgba(200,169,110,0.8))`, borderRadius: 1 }} />
@@ -138,7 +280,7 @@ export default function ProfileScreen() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Space+Mono:wght@400;700&family=Noto+Serif+JP:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Space+Mono:wght@400;700&family=Noto+Serif+JP:wght@300;400;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #0a0a0c; }
         ::-webkit-scrollbar { width: 3px; }
@@ -162,7 +304,7 @@ export default function ProfileScreen() {
         </div>
 
         {/* ── IDENTITY CARD ── */}
-        <div style={{ ...s.card, display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 16, alignItems: "flex-start", position: "relative", overflow: "hidden" }}>
+        <div style={{ ...s.card, display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 16, alignItems: "flex-start", position: "relative", overflow: "visible" }}>
           {/* Kanji watermark */}
           <div style={{ position: "absolute", top: 12, left: 14, fontFamily: "'Noto Serif JP', serif", fontSize: 38, color: "rgba(200,169,110,0.06)", lineHeight: 1, pointerEvents: "none" }}>影</div>
 
@@ -250,7 +392,6 @@ export default function ProfileScreen() {
           {/* Tokens */}
           <div style={{ background: C.panel, border: `1px solid ${C.border}`, borderRadius: 12, padding: 18, position: "relative", overflow: "hidden" }}>
             <CardTitle label="Tokens" icon={<Icon size={15} vb="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 8v8M8 12h8" /></Icon>} />
-            {/* Coin */}
             <div style={{ position: "absolute", right: 14, top: 14, width: 42, height: 42, borderRadius: "50%", background: "radial-gradient(circle at 35% 30%, #3a2e10, #1a1508)", border: `1px solid rgba(200,169,110,0.3)`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Noto Serif JP', serif", fontSize: 17, color: "rgba(200,169,110,0.7)" }}>影</div>
             <div style={{ fontSize: 8, letterSpacing: "0.12em", color: C.textMuted, textTransform: "uppercase", marginBottom: 6 }}>Allocated Tokens</div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 5, marginBottom: 14 }}>
