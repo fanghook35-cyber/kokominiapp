@@ -913,8 +913,8 @@ export default function AirdropDashboard() {
     });
   }, [showToast]);
 
-  const tabs = ['dashboard', 'tasks', 'economy', 'bot'];
-  const tabLabels = { dashboard: 'Dashboard', tasks: 'Tasks', economy: 'Economy', bot: 'Bot Logic' };
+  const tabs = ['dashboard', 'tasks', 'economy'];
+  const tabLabels = { dashboard: 'Dashboard', tasks: 'Tasks', economy: 'Economy' };
 
   // Hide top nav inside Telegram webview
   const inTelegram = typeof window !== 'undefined' && !!window.Telegram?.WebApp?.initData;
