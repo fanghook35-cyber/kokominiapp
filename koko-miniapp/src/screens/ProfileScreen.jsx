@@ -208,10 +208,7 @@ export default function ProfileScreen() {
           {/* Village Badge */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, paddingTop: 4 }}>
             <div style={{ width: 54, height: 68, background: "linear-gradient(180deg,#1e1c14,#161410)", border: `1px solid rgba(200,169,110,0.25)`, borderRadius: "6px 6px 30px 30px", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(200,169,110,0.6)" }}>
-              <BadgeKoko />
-            </div>
-            <div style={{ fontSize: 7, letterSpacing: "0.16em", color: C.goldDim, textTransform: "uppercase", textAlign: "center", lineHeight: 1.5 }}>Kairoku<br />Villager</div>
-          </div>
+              <VillageBadge level={18} />
         </div>
 
         {/* ── STATS ── */}
