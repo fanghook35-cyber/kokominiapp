@@ -1,11 +1,11 @@
 import React from 'react'
 
 const TABS = [
-  { id: 'home',        label: 'HOME',     icon: HomeIcon     },
-  { id: 'tasks',       label: 'MISSIONS', icon: MissionIcon  },
-  { id: 'leaderboard', label: 'RANK',     icon: RankIcon     },
-  { id: 'token',       label: 'TOKEN',    icon: TokenIcon    },
-  { id: 'profile',     label: 'PROFILE',  icon: ProfileIcon  },
+  { id: 'home',        label: 'HOME',    icon: HomeIcon    },
+  { id: 'tasks',       label: 'QUESTS',  icon: MissionIcon },
+  { id: 'leaderboard', label: 'RANK',    icon: RankIcon    },
+  { id: 'token',       label: 'TOKEN',   icon: TokenIcon   },
+  { id: 'profile',     label: 'PROFILE', icon: ProfileIcon },
 ]
 
 const C = {
@@ -33,14 +33,22 @@ export default function BottomNav({ active, onChange }) {
             key={tab.id}
             onClick={() => onChange(tab.id)}
             style={{
-              flex: 1, padding: '10px 4px 8px',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-              background: 'none', border: 'none', cursor: 'pointer',
+              flex: 1,
+              padding: '10px 0 8px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 4,
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
               opacity: isActive ? 1 : 0.38,
               transition: 'opacity 0.15s',
               touchAction: 'manipulation',
               WebkitTapHighlightColor: 'transparent',
               position: 'relative',
+              minWidth: 0,
             }}
           >
             {/* Gold top bar indicator */}
@@ -48,15 +56,21 @@ export default function BottomNav({ active, onChange }) {
               <div style={{
                 position: 'absolute', top: 0, left: '50%',
                 transform: 'translateX(-50%)',
-                width: 24, height: 1.5, borderRadius: 1,
+                width: 20, height: 1.5, borderRadius: 1,
                 background: C.gold,
               }} />
             )}
+
             <tab.icon active={isActive} />
+
             <span style={{
-              fontSize: 8, letterSpacing: 1, textTransform: 'uppercase',
+              fontSize: 7,
+              letterSpacing: 0.6,
+              textTransform: 'uppercase',
               color: isActive ? C.gold : C.dim,
               fontFamily: "'JetBrains Mono', monospace",
+              whiteSpace: 'nowrap',
+              lineHeight: 1,
             }}>
               {tab.label}
             </span>
