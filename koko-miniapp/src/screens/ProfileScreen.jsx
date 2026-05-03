@@ -1,4 +1,5 @@
 import { useState } from "react";
+import VillageBadge from "../components/VillageBadge";
 
 const C = {
   bg:        "#0a0a0c",
@@ -206,13 +207,9 @@ export default function ProfileScreen() {
           </div>
 
           {/* Village Badge */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, paddingTop: 4 }}>
-            <div style={{ width: 54, height: 68, background: "linear-gradient(180deg,#1e1c14,#161410)", border: `1px solid rgba(200,169,110,0.25)`, borderRadius: "6px 6px 30px 30px", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(200,169,110,0.6)" }}>
-              <BadgeKoko />
-            </div>
-            <div style={{ fontSize: 7, letterSpacing: "0.16em", color: C.goldDim, textTransform: "uppercase", textAlign: "center", lineHeight: 1.5 }}>Kairoku<br />Villager</div>
-          </div>
-        </div>
+          <div style={{ display: "flex", justifyContent: "center", paddingTop: 4 }}>
+  <VillageBadge level={18} />
+</div>
 
         {/* ── STATS ── */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, margin: "0 16px 10px" }}>
