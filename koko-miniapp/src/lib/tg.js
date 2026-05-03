@@ -55,6 +55,7 @@ export const TG_GROUP     = 'https://t.me/KokoKairoku'
 export const TOKEN_RATE   = 10   // points per 1 $KOKO
 export const REFERRAL_CAP = 75
 export const AIRDROP_CAP  = 266_666_666
+export const KP_PER_MIN   = 2780  // passive farming rate
 
 export const TASK_POINTS = {
   joined_telegram: 500,
