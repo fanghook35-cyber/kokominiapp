@@ -1,5 +1,5 @@
 import { useState } from "react";
-import VillageBadge from "../components/VillageBadge";
+import VillageBadge from "./VillageBadge";
 
 const C = {
   bg:        "#0a0a0c",
@@ -79,16 +79,7 @@ const KokoAvatar = () => (
   </svg>
 );
 
-const BadgeKoko = () => (
-  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
-    <ellipse cx="20" cy="18" rx="10" ry="9" fill="none" stroke="currentColor" strokeWidth="1.2" />
-    <polygon points="14,13 10,5 17,11" fill="currentColor" opacity="0.7" />
-    <polygon points="26,13 30,5 23,11" fill="currentColor" opacity="0.7" />
-    <ellipse cx="16" cy="16" rx="2.5" ry="2.8" fill="currentColor" opacity="0.8" />
-    <ellipse cx="24" cy="16" rx="2.5" ry="2.8" fill="currentColor" opacity="0.8" />
-    <path d="M10 26 Q20 22 30 26 L32 36 H8 Z" fill="currentColor" opacity="0.5" />
-  </svg>
-);
+
 
 // ── Sub-components ───────────────────────────────────────────────────
 const StatBar = ({ pct }) => (
@@ -136,6 +127,7 @@ const NavItem = ({ icon, label, active }) => (
 // ── Main Component ───────────────────────────────────────────────────
 export default function ProfileScreen() {
   const [copied, setCopied] = useState(false);
+  const userLevel = 18;
 
   const handleCopy = () => {
     navigator.clipboard.writeText("kairoku.world/ref/Momoverse01");
@@ -180,7 +172,7 @@ export default function ProfileScreen() {
               <KokoAvatar />
             </div>
             <div style={{ position: "absolute", bottom: -2, left: "50%", transform: "translateX(-50%)", background: "#1a1508", border: `1px solid rgba(200,169,110,0.4)`, borderRadius: 6, padding: "2px 10px", textAlign: "center", minWidth: 52 }}>
-              <div style={{ fontFamily: "'Cinzel', serif", fontSize: 14, color: C.gold, fontWeight: 600, lineHeight: 1 }}>18</div>
+              <div style={{ fontFamily: "'Cinzel', serif", fontSize: 14, color: C.gold, fontWeight: 600, lineHeight: 1 }}>{userLevel}</div>
               <div style={{ fontSize: 7, letterSpacing: "0.16em", color: C.goldDim, textTransform: "uppercase" }}>Level</div>
             </div>
           </div>
@@ -207,9 +199,10 @@ export default function ProfileScreen() {
           </div>
 
           {/* Village Badge */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, paddingTop: 4 }}>
-  <VillageBadge level={18} />
-</div>
+          <div style={{ paddingTop: 4, transform: "scale(0.78)", transformOrigin: "top center" }}>
+            <VillageBadge level={userLevel} />
+          </div>
+        </div>
 
         {/* ── STATS ── */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, margin: "0 16px 10px" }}>
